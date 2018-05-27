@@ -1,5 +1,7 @@
 package com.mycompany.blockychain;
 import com.mycompany.blockychain.Models.Block;
+import com.google.gson.*;
+import java.util.ArrayList;
 
 /**
  * Entry point of the application.
@@ -7,16 +9,16 @@ import com.mycompany.blockychain.Models.Block;
  */
 public class App 
 {
+    public static ArrayList<Block> blockchain = new ArrayList<Block>();
+
     public static void main( String[] args )
     {
-        // Round 1 of testing
-        Block genesis = new Block("Hi, I'm the first block!", "0");
-        System.out.println("Hash for Block 1: " + genesis.hash);
+        // Create a 3-block chain and output as Json
+        blockchain.add(new Block("This is the genesis block", "0"));
+        blockchain.add(new Block("This is the second block", blockchain.get(blockchain.size()-1).hash));
+        blockchain.add(new Block("This is the third block", blockchain.get(blockchain.size()-1).hash));
 
-        Block second = new Block("Hi, I'm the second block!", genesis.hash);
-        System.out.println("Hash for Block 2: " + second.hash);
-
-        Block third = new Block("Hi, I'm the third block!", second.hash);
-        System.out.println("Hash for Block 3: " + third.hash);
+        String blockJSON = new GsonBuilder().setPrettyPrinting().create().toJson(blockchain);
+        System.out.println(blockJSON);
     }
 }
